@@ -2,12 +2,17 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Excel {
+
+    private final static Logger logger = LoggerFactory.getLogger(Excel.class);
+
     private String excelFilePath;
 
 
@@ -18,6 +23,7 @@ public class Excel {
     public List<BankAccountBalance> getBankAccountBalance() {
         List<BankAccountBalance> bankAccountBalanceList = new ArrayList<>();
 
+        logger.info("Processing the Banck Account Balance");
         try (XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream(excelFilePath))) {
 
             XSSFSheet sheet = workbook.getSheet("EXTRAS DE CONT TUNAT"); // get Sheet 2 and assign it to sheet
@@ -31,7 +37,7 @@ public class Excel {
                 if (rowData == null) {
                     // This whole row is empty
                     // Handle it as needed
-                    System.out.println("Row: " + rowNumber + " from sheet: " + sheet.getSheetName() + " is empty");
+                    logger.warn("Row: {} from sheet: {} is empty", rowNumber, sheet.getSheetName());
                     continue;
                 }
 
@@ -42,18 +48,16 @@ public class Excel {
                     Cell cell = rowData.getCell(columnNumber, Row.RETURN_BLANK_AS_NULL);
                     if (cell == null) {
                         // The spreadsheet is empty in this cell
-                        System.out.println("Cell from row: "
-                                + rowNumber + " and column: "
-                                + columnNumber + " from sheet: "
-                                + sheet.getSheetName() + " is empty");
+                        logger.warn("Cell from row {} and column {} from sheet {} is empty",
+                                rowNumber, columnNumber, sheet.getSheetName());
                     } else {
 
                         if (columnNumber == 3){
                             bankAccountBalance = new BankAccountBalance();
-//                            System.out.println("Setting the cash: " + cell.getNumericCellValue());
+                            logger.info("Setting the cash: {}", cell.getNumericCellValue());
                             bankAccountBalance.setCashIn(String.valueOf(cell.getNumericCellValue()));
                         } else if (cell.getStringCellValue().contains("Ordonator:") && bankAccountBalance != null){
-//                            System.out.println("Setting the provider: " + cell.getStringCellValue());
+                            logger.info("Setting the provider: ", cell.getStringCellValue());
                             bankAccountBalance.setMoneyProvider(cell.getStringCellValue().split(":")[1]);
                             bankAccountBalanceList.add(bankAccountBalance);
                         }
@@ -67,6 +71,7 @@ public class Excel {
     }
 
     public List<Order> getOrders(){
+        logger.info("Processing the Orders");
 
         List<Order> orderList = new ArrayList<>();
 
@@ -83,7 +88,7 @@ public class Excel {
                 if (rowData == null) {
                     // This whole row is empty
                     // Handle it as needed
-                    System.out.println("Row: " + rowNumber + " from sheet: " + sheet.getSheetName() + " is empty");
+                    logger.warn("Row {} from sheet {} is empty", rowNumber, sheet.getSheetName());
                     continue;
                 }
 
@@ -91,12 +96,10 @@ public class Excel {
                 Cell cell = rowData.getCell(2, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
                     // The spreadsheet is empty in this cell
-                    System.out.println("Cell from row: "
-                            + rowNumber + " and column: "
-                            + 0 + " from sheet: "
-                            + sheet.getSheetName() + " is empty");
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty",
+                            rowNumber, 0, sheet.getSheetName());
                 } else {
-//                    System.out.println("Setting the invoice number: " + cell.getStringCellValue());
+                    logger.info("Setting the invoice number {}", cell.getStringCellValue());
                     order.setInvoiceNumber(cell.getStringCellValue());
                 }
 
@@ -104,25 +107,20 @@ public class Excel {
                 cell = rowData.getCell(13, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
                     // The spreadsheet is empty in this cell
-                    System.out.println("Cell from row: "
-                            + rowNumber + " and column: "
-                            + 0 + " from sheet: "
-                            + sheet.getSheetName() + " is empty");
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
+                            rowNumber, 0, sheet.getSheetName());
                 } else {
-//                    System.out.println("Setting the invoice value: " + String.valueOf(cell.getNumericCellValue()));
+                    logger.info("Setting the invoice value {}", String.valueOf(cell.getNumericCellValue()));
                     order.setInvoiceValue(String.valueOf(cell.getNumericCellValue()));
                 }
 
                 // get delivery provider
                 cell = rowData.getCell(14, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
-                    // The spreadsheet is empty in this cell
-                    System.out.println("Cell from row: "
-                            + rowNumber + " and column: "
-                            + 0 + " from sheet: "
-                            + sheet.getSheetName() + " is empty");
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
+                            rowNumber, 0, sheet.getSheetName());
                 } else {
-//                    System.out.println("Setting the deliveryType: " + cell.getStringCellValue());
+                    logger.info("Setting the deliveryType {}", cell.getStringCellValue());
                     order.setDeliveryType(cell.getStringCellValue());
                 }
 
