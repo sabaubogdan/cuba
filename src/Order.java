@@ -30,6 +30,7 @@ public class Order {
 	private String unknownText7;
 	private String unknownText8;
 
+
 	public String getInvoceDate() {	return invoceDate;	}
 
 	public void setInvoceDate(String invoceDate) {this.invoceDate = invoceDate;}
