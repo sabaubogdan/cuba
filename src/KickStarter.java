@@ -5,7 +5,7 @@ public class KickStarter {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-        String excelFilePath = "/home/dragos/javadev/Excel/src/data.xlsx";
+        String excelFilePath = "C:\\Users\\Bogdan\\workspace\\cuba\\src\\data.xlsx";
         Excel excel = new Excel(excelFilePath);
 
         List<BankAccountBalance> bankAccountBalanceList = excel.getBankAccountBalance();
