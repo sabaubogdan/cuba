@@ -24,6 +24,9 @@ public class KickStarter {
         for (Order order : orderList){
             System.out.println("Invoice number: " + order.getInvoiceNumber()
                     + " invoice value: " + order.getInvoiceValue()
+                    + " invoice date: " + order.getInvoiceDate()
+                    + " cash in type: " + order.getCashInType()
+                    + " recipient: " + order.getRecipient()
                     + " delivery type: " + order.getDeliveryType());
         }
 

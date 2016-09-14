@@ -94,7 +94,7 @@ public class Excel {
                 }
 
                 // get invoice number
-                Cell cell = rowData.getCell(2, Row.RETURN_BLANK_AS_NULL);
+                Cell cell = rowData.getCell(1, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
                     // The spreadsheet is empty in this cell
                     logger.warn("Cell from row {} and column {} from sheet {} is empty",
@@ -105,7 +105,7 @@ public class Excel {
                 }
 
                 // get invoice value
-                cell = rowData.getCell(13, Row.RETURN_BLANK_AS_NULL);
+                cell = rowData.getCell(3, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
                     // The spreadsheet is empty in this cell
                     logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
@@ -115,14 +115,44 @@ public class Excel {
                     order.setInvoiceValue(String.valueOf(cell.getNumericCellValue()));
                 }
 
-                // get delivery provider
-                cell = rowData.getCell(14, Row.RETURN_BLANK_AS_NULL);
+                // get delivery provider/deliveryType
+                cell = rowData.getCell(4, Row.RETURN_BLANK_AS_NULL);
                 if (cell == null) {
                     logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
                             rowNumber, 0, sheet.getSheetName());
                 } else {
                     logger.info("Setting the deliveryType {}", cell.getStringCellValue());
                     order.setDeliveryType(cell.getStringCellValue());
+                }
+
+                // get cashInType
+                cell = rowData.getCell(2, Row.RETURN_BLANK_AS_NULL);
+                if (cell == null) {
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
+                            rowNumber, 0, sheet.getSheetName());
+                } else {
+                    logger.info("Setting the cashInType {}", cell.getStringCellValue());
+                    order.setCashInType(cell.getStringCellValue());
+                }
+
+                // get Recipient
+                cell = rowData.getCell(5, Row.RETURN_BLANK_AS_NULL);
+                if (cell == null) {
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
+                            rowNumber, 0, sheet.getSheetName());
+                } else {
+                    logger.info("Setting the Recipient {}", cell.getStringCellValue());
+                    order.setRecipient(cell.getStringCellValue());
+                }
+
+                // get Date
+                cell = rowData.getCell(0, Row.RETURN_BLANK_AS_NULL);
+                if (cell == null) {
+                    logger.warn("Cell from row {} and column {} from sheet {} is empty{}",
+                            rowNumber, 0, sheet.getSheetName());
+                } else {
+                    logger.info("Setting the Date {}", cell.getDateCellValue());
+                    order.setInvoiceDate(cell.getDateCellValue());
                 }
 
                 orderList.add(order);
